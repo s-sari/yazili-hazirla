@@ -76,15 +76,40 @@
 
   .container { max-width: 780px; margin: 0 auto; }
 
-  header { text-align: center; margin-bottom: 50px; }
+  .top-bar {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    margin-bottom: 12px; gap: 12px;
+  }
+  header { text-align: center; flex: 1; padding-top: 64px; padding-bottom: 64px; }
   header h1 {
     font-family: 'Playfair Display', serif;
-    font-size: 2.6rem;
+    font-size: 3rem;
     color: var(--accent);
     letter-spacing: -0.5px;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
   }
-  header p { color: var(--muted); font-size: 0.95rem; font-weight: 300; }
+  header p { color: var(--muted); font-size: 1.05rem; font-weight: 300; }
+
+  .theme-bar {
+    display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end;
+  }
+  .theme-chip {
+    display: flex; align-items: center; justify-content: center;
+    padding: 6px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: var(--surface);
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .theme-chip:hover { border-color: var(--accent); }
+  .theme-chip.active { border-color: var(--accent); background: var(--accent); }
+  .theme-chip .dot {
+    width: 14px; height: 14px; border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.12);
+    flex-shrink: 0;
+  }
 
   .card {
     background: var(--surface);
@@ -394,58 +419,56 @@
     margin: 18px 0;
   }
 
-  /* Theme switcher */
-  .theme-bar {
-    display: flex; gap: 8px; justify-content: center;
-    margin-bottom: 28px; flex-wrap: wrap;
+  /* Theme switcher — moved to top bar, styles defined above */
+  .theme-menu-item {
+    display: flex; align-items: center; gap: 8px;
+    width: 100%; padding: 7px 10px; border: none;
+    background: none; color: var(--text); cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 0.82rem;
+    border-radius: 7px; transition: background 0.15s;
+    text-align: left;
   }
-  .theme-chip {
-    display: flex; align-items: center; gap: 7px;
-    padding: 7px 14px;
-    border-radius: 20px;
-    border: 2px solid var(--border);
-    background: var(--surface);
-    color: var(--text);
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.82rem;
-    font-weight: 500;
-    transition: all 0.15s;
-    user-select: none;
-  }
-  .theme-chip:hover { border-color: var(--accent); }
-  .theme-chip.active { border-color: var(--accent); background: var(--accent); color: #fff; }
-  .theme-chip .dot {
+  .theme-menu-item:hover { background: var(--surface2); }
+  .theme-menu-item.active { background: var(--surface2); font-weight: 600; color: var(--accent); }
+  .theme-menu-item .dot {
     width: 12px; height: 12px; border-radius: 50%;
-    border: 1px solid rgba(0,0,0,0.12);
-    flex-shrink: 0;
+    border: 1px solid rgba(0,0,0,0.15); flex-shrink: 0;
   }
 </style>
 </head>
 <body class="theme-dark-blue">
 <div class="container">
-  <header>
-    <h1>HızlıSınav <span style="font-size:0.55em; opacity:0.5; font-weight:400;">V2.1</span></h1>
-    <p>Fotoğrafları seç ve sınavını hazırla</p>
-  </header>
-
-  <!-- Tema Seçici -->
-  <div class="theme-bar">
-    <button class="theme-chip" onclick="setTheme('', this)">
-      <span class="dot" style="background:#f5f5f5; border-color:#ccc;"></span> Beyaz
-    </button>
-    <button class="theme-chip" onclick="setTheme('theme-dark', this)">
-      <span class="dot" style="background:#1a1a1a;"></span> Koyu
-    </button>
-    <button class="theme-chip active" onclick="setTheme('theme-dark-blue', this)">
-      <span class="dot" style="background:#0f172a;"></span> Gece Mavisi
-    </button>
-    <button class="theme-chip" onclick="setTheme('theme-green', this)">
-      <span class="dot" style="background:#16a34a;"></span> Yeşil
-    </button>
-    <button class="theme-chip" onclick="setTheme('theme-purple', this)">
-      <span class="dot" style="background:#7c3aed;"></span> Mor
-    </button>
+  <div style="position:relative; margin-bottom:0;">
+    <div style="position:absolute; top:0; right:0; z-index:10;">
+      <div style="position:relative;">
+        <button id="themeToggleBtn" onclick="toggleThemeMenu()" style="background:none; border:1px solid var(--border); border-radius:8px; padding:5px 12px; font-size:0.75rem; color:var(--muted); cursor:pointer; font-family:'DM Sans',sans-serif; display:flex; align-items:center; gap:6px;">
+          <span id="themeActiveDot" style="background:#0f172a; width:10px; height:10px; border-radius:50%; border:1px solid rgba(255,255,255,0.2); display:inline-block; flex-shrink:0;"></span>
+          <span id="themeActiveName">Gece Mavisi</span>
+          <span style="font-size:0.6rem; opacity:0.6;">▼</span>
+        </button>
+        <div id="themeMenu" style="display:none; position:absolute; top:110%; right:0; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:6px; z-index:100; min-width:140px; box-shadow:0 8px 24px rgba(0,0,0,0.3);">
+          <button class="theme-menu-item active" onclick="setTheme('theme-dark-blue', this, 'Gece Mavisi', '#0f172a')">
+            <span class="dot" style="background:#0f172a;"></span> Gece Mavisi
+          </button>
+          <button class="theme-menu-item" onclick="setTheme('', this, 'Beyaz', '#f5f5f5')">
+            <span class="dot" style="background:#f5f5f5; border-color:#ccc;"></span> Beyaz
+          </button>
+          <button class="theme-menu-item" onclick="setTheme('theme-dark', this, 'Koyu', '#1a1a1a')">
+            <span class="dot" style="background:#1a1a1a;"></span> Koyu
+          </button>
+          <button class="theme-menu-item" onclick="setTheme('theme-green', this, 'Yeşil', '#16a34a')">
+            <span class="dot" style="background:#16a34a;"></span> Yeşil
+          </button>
+          <button class="theme-menu-item" onclick="setTheme('theme-purple', this, 'Mor', '#7c3aed')">
+            <span class="dot" style="background:#7c3aed;"></span> Mor
+          </button>
+        </div>
+      </div>
+    </div>
+    <header>
+      <h1>HızlıSınav <span style="font-size:0.55em; opacity:0.5; font-weight:400;">V2.1</span></h1>
+      <p>Fotoğrafları seç ve sınavını hazırla</p>
+    </header>
   </div>
 
   <!-- Sorular -->
@@ -742,11 +765,26 @@ const { jsPDF } = window.jspdf;
 let photos = []; // {id, file, dataUrl, name}
 let dragSrcIdx = null;
 
+function toggleThemeMenu() {
+  const menu = document.getElementById('themeMenu');
+  menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#themeToggleBtn') && !e.target.closest('#themeMenu')) {
+    const menu = document.getElementById('themeMenu');
+    if (menu) menu.style.display = 'none';
+  }
+});
+
 // Theme switcher
-function setTheme(cls, btn) {
+function setTheme(cls, btn, name, color) {
   document.body.className = cls;
-  document.querySelectorAll('.theme-chip').forEach(c => c.classList.remove('active'));
-  btn.classList.add('active');
+  document.querySelectorAll('.theme-menu-item').forEach(c => c.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  if (name) document.getElementById('themeActiveName').textContent = name;
+  if (color) document.getElementById('themeActiveDot').style.background = color;
+  document.getElementById('themeMenu').style.display = 'none';
 }
 
 // Orientation & columns
