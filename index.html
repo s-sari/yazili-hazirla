@@ -458,9 +458,9 @@
 </style>
 </head>
 <body class="theme-dark-blue">
-<div style="position:fixed; top:12px; left:12px; z-index:1000; text-align:left; line-height:1.4;">
-  <div style="font-size:0.72rem; color:var(--muted); opacity:0.7;">ücretsizdir.</div>
-  <div style="font-size:0.72rem; color:var(--muted); opacity:0.7;">tasarım: s-sari</div>
+<div style="position:fixed; top:12px; left:12px; z-index:1000; line-height:1.6;">
+  <div style="font-size:0.72rem; color:var(--muted); opacity:0.7;">© s-sari</div>
+  <div style="font-size:0.72rem; color:var(--muted); opacity:0.5;" id="freeTextLabel">ücretsiz, reklamsız ve süresiz</div>
 </div>
 
 <div style="position:absolute; top:12px; right:12px; z-index:1000;">
@@ -492,7 +492,7 @@
 
 <div class="container">
     <header>
-      <h1>HızlıSınav <span style="font-size:0.38em; opacity:0.5; font-weight:400;">V3.1</span></h1>
+      <h1>HızlıSınav <span style="font-size:0.38em; opacity:0.5; font-weight:400;">V3.4 <span style="background:var(--accent); color:#fff; border-radius:4px; padding:1px 4px; font-size:0.7em; opacity:1; font-weight:700; letter-spacing:0.3px; font-family:Arial, sans-serif; font-style:normal;">beta</span></span></h1>
       <p>Fotoğrafları seç ve sınavını hazırla</p>
     </header>
 
@@ -729,6 +729,14 @@
           <button class="style-btn italic-btn" id="labelItalic" onclick="toggleStyle('labelItalic'); updatePreview()">İ</button>
         </div>
       </div>
+      <div class="form-row">
+        <label>Hizalama</label>
+        <div class="style-btns">
+          <button class="style-btn active" id="labelAlignLeft" onclick="setLabelAlign('left')">← Sola</button>
+          <button class="style-btn" id="labelAlignCenter" onclick="setLabelAlign('center')">↔ Orta</button>
+          <button class="style-btn" id="labelAlignRight" onclick="setLabelAlign('right')">→ Sağa</button>
+        </div>
+      </div>
       <div class="label-preview" id="labelPreview" style="margin-top:12px;">SORU 1 &nbsp;&nbsp;(10 Puan)</div>
       <div style="font-size:0.82rem; color:var(--muted); margin-top:8px;">Her soru için puan, soru listesinde ayrı ayrı girilecek.</div>
     </div>
@@ -875,6 +883,7 @@ function selectFitPages(n) {
 }
 
 let photoAlign = 'left';
+let labelAlign = 'left';
 
 function selectAlign(val) {
   photoAlign = val;
@@ -978,6 +987,14 @@ function isActive(id) {
 }
 
 // Label preview
+function setLabelAlign(align) {
+  labelAlign = align;
+  ['Left','Center','Right'].forEach(a => {
+    const btn = document.getElementById('labelAlign' + a);
+    if (btn) btn.classList.toggle('active', a.toLowerCase() === align);
+  });
+}
+
 function updatePreview() {
   const enabled = document.getElementById('labelEnabled').checked;
   document.getElementById('labelOptions').style.opacity = enabled ? '1' : '0.4';
@@ -995,6 +1012,12 @@ function updatePreview() {
   preview.style.fontStyle = italic ? 'italic' : 'normal';
 }
 updatePreview();
+
+// Kaydırınca "ücretsiz..." kaybolsun
+window.addEventListener('scroll', () => {
+  const el = document.getElementById('freeTextLabel');
+  if (el) el.style.opacity = window.scrollY > 30 ? '0' : '0.5';
+});
 
 // File input
 document.getElementById('fileInput').addEventListener('change', e => handleFiles(e.target.files));
@@ -1106,7 +1129,7 @@ function renderList() {
       <span class="item-name" title="${p.name}">${p.name}</span>
       <div class="point-wrap">
         <label>Puan</label>
-        <input class="point-input" type="number" min="0" value="${p.points}" data-idx="${idx}" oninput="updatePoints(${idx}, this.value)">
+        <input class="point-input" type="text" inputmode="numeric" value="${p.points}" data-idx="${idx}" oninput="updatePoints(${idx}, this.value)" onfocus="this.select()">
       </div>
       <button class="remove-btn" onclick="removePhoto(${idx})" title="Sil">✕</button>
     `;
@@ -1506,7 +1529,11 @@ async function generatePDF() {
       const pts = photo.points ?? 0;
       const labelText = `SORU ${qNum}   (${pts} Puan)`;
       const labelColor = hexToRgbStr(labelColorHex);
-      drawTextLine(labelText, xPos + padH, yPos, labelFontSize, labelColor, labelBold, labelItalic);
+      let labelX = xPos + padH;
+      if (labelAlign === 'center') labelX = xPos + colW / 2;
+      else if (labelAlign === 'right') labelX = xPos + colW - padH;
+      const labelTextAlign = labelAlign === 'center' ? 'center' : labelAlign === 'right' ? 'right' : 'left';
+      drawTextBlock(labelText, labelX, yPos, labelFontSize, labelColor, labelBold, labelItalic, colW - padH * 2, labelTextAlign);
       yPos += labelLineH;
     }
 
