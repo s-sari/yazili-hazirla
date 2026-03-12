@@ -6,7 +6,7 @@
 <title>Sınav Hazırla</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap');
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -82,13 +82,14 @@
   }
   header { text-align: center; flex: 1; padding-top: 0; padding-bottom: 0; }
   header h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 3rem;
+    font-family: 'Nunito', sans-serif;
+    font-size: 2.6rem;
     color: var(--accent);
     letter-spacing: -0.5px;
-    margin-bottom: 0px;
+    margin-bottom: 2px;
+    line-height: 1.1;
   }
-  header p { color: var(--muted); font-size: 1.05rem; font-weight: 300; margin: 0 0 18px 0; line-height: 1; }
+  header p { color: var(--muted); font-size: 0.88rem; font-weight: 300; margin: 0 0 18px 0; line-height: 1; letter-spacing: 0.2px; }
 
   .theme-bar {
     display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end;
@@ -491,7 +492,7 @@
 
 <div class="container">
     <header>
-      <h1>HızlıSınav <span style="font-size:0.38em; opacity:0.5; font-weight:400;">V4.0 <span style="background:var(--accent); color:#fff; border-radius:4px; padding:1px 4px; font-size:0.7em; opacity:1; font-weight:700; letter-spacing:0.3px; font-family:Arial, sans-serif; font-style:normal;">pro</span></span></h1>
+      <h1 style="position:relative; display:inline-block;">HızlıSınav<span style="display:inline-block; vertical-align:top; margin-left:0.1em; margin-top:1.55em; font-family:'DM Sans',sans-serif; font-size:0.22em; font-weight:700; letter-spacing:0.02em; background:var(--accent); color:#fff; border-radius:4px; padding:2px 5px; line-height:1.4; white-space:nowrap;">pro <span style="color:#fff; font-weight:700; opacity:0.7;">v4.0</span></span></h1>
       <p>Fotoğrafları seç ve sınavını hazırla</p>
     </header>
 
