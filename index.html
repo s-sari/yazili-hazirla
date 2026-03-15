@@ -459,7 +459,7 @@
 </head>
 <body class="theme-dark-blue">
 <div style="position:fixed; top:12px; left:12px; z-index:1000; line-height:1.6;">
-  <div style="font-size:0.72rem; color:var(--muted); opacity:0.7;">© s-sari</div>
+  <div style="font-size:0.72rem; color:var(--muted); opacity:0.7;">© basmobil</div>
   <div style="font-size:0.72rem; color:var(--muted); opacity:0.5;" id="freeTextLabel">ücretsiz, reklamsız ve süresiz</div>
 </div>
 
@@ -1761,7 +1761,7 @@ async function generatePDF() {
   progressFill.style.width = '100%';
   progressLabel.textContent = '✅ PDF hazır!';
 
-  const safeName = 's-sari-yazili-hazirla';
+  const safeName = 'basmobil-HızlıSınav';
   const pdfBlob = pdf.output('blob');
   const blobUrl = URL.createObjectURL(pdfBlob);
 
@@ -1807,7 +1807,7 @@ function getImageFormat(dataUrl) {
 
 // İletişim butonu — parçalı yapı Cloudflare encode'undan kaçınır
 document.getElementById('contactBtn').addEventListener('click', function() {
-  const u = 's-sari-egitim-cozumleri';
+  const u = 'basmobil';
   const d = 'proton.me';
   const s = 'H\u0131zl\u0131S\u0131nav talep/fikir';
   window.location.href = 'mailto:' + u + '@' + d + '?subject=' + encodeURIComponent(s);
